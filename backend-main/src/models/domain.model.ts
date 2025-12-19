@@ -6,7 +6,6 @@ export interface Domain {
 }
 
 export interface CreateDomainInput {
-  id: string;
   domain_string: string;
 }
 

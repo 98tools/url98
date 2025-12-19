@@ -1,18 +1,21 @@
 import type { D1Database } from '../types/cloudflare';
 import type { Url, CreateUrlInput, UpdateUrlInput } from '../models/url.model';
+import { generateId } from '../utils/id';
 
 export class UrlCRUD {
   constructor(private db: D1Database) {}
 
   async create(input: CreateUrlInput): Promise<Url> {
     const now = Date.now();
+    const id = generateId();
+    
     await this.db
       .prepare(
         `INSERT INTO urls (id, created_at, updated_at, user_id, domain_id, url, title, keyword, description, clicks, ip_address, active, options)
          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 0, ?, 1, ?)`
       )
       .bind(
-        input.id,
+        id,
         now,
         now,
         input.user_id,
@@ -27,7 +30,7 @@ export class UrlCRUD {
       .run();
 
     return {
-      id: input.id,
+      id,
       created_at: now,
       updated_at: now,
       user_id: input.user_id,

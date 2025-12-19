@@ -15,7 +15,6 @@ export interface Url {
 }
 
 export interface CreateUrlInput {
-  id: string;
   user_id: string;
   domain_id: string;
   url: string;

@@ -8,15 +8,14 @@ const logRoutes = new Hono<{ Bindings: Env }>();
 logRoutes.post('/', async (c) => {
   try {
     const body = await c.req.json();
-    const { id, url_id, ip_address, user_agent, referrer, country_code, country, city, region } = body;
+    const { url_id, ip_address, user_agent, referrer, country_code, country, city, region } = body;
 
-    if (!id || !url_id) {
-      return c.json({ error: 'id and url_id are required' }, 400);
+    if (!url_id) {
+      return c.json({ error: 'url_id is required' }, 400);
     }
 
     const logCRUD = new LogCRUD(c.env.DB);
     const log = await logCRUD.create({
-      id,
       url_id,
       ip_address,
       user_agent,

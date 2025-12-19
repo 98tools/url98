@@ -8,18 +8,17 @@ const urlRoutes = new Hono<{ Bindings: Env }>();
 urlRoutes.post('/', async (c) => {
   try {
     const body = await c.req.json();
-    const { id, user_id, domain_id, url, title, keyword, description, ip_address, options } = body;
+    const { user_id, domain_id, url, title, keyword, description, ip_address, options } = body;
 
-    if (!id || !user_id || !domain_id || !url || !title || !keyword || !description) {
+    if (!user_id || !domain_id || !url || !title || !keyword || !description) {
       return c.json(
-        { error: 'id, user_id, domain_id, url, title, keyword, and description are required' },
+        { error: 'user_id, domain_id, url, title, keyword, and description are required' },
         400
       );
     }
 
     const urlCRUD = new UrlCRUD(c.env.DB);
     const newUrl = await urlCRUD.create({
-      id,
       user_id,
       domain_id,
       url,

@@ -1,20 +1,23 @@
 import type { D1Database } from '../types/cloudflare';
 import type { Domain, CreateDomainInput, UpdateDomainInput } from '../models/domain.model';
+import { generateId } from '../utils/id';
 
 export class DomainCRUD {
   constructor(private db: D1Database) {}
 
   async create(input: CreateDomainInput): Promise<Domain> {
     const now = Date.now();
+    const id = generateId();
+    
     await this.db
       .prepare(
         'INSERT INTO domains (id, domain_string, created_at, updated_at) VALUES (?, ?, ?, ?)'
       )
-      .bind(input.id, input.domain_string, now, now)
+      .bind(id, input.domain_string, now, now)
       .run();
 
     return {
-      id: input.id,
+      id,
       domain_string: input.domain_string,
       created_at: now,
       updated_at: now,

@@ -12,7 +12,6 @@ export interface Log {
 }
 
 export interface CreateLogInput {
-  id: string;
   url_id: string;
   ip_address?: string | null;
   user_agent?: string | null;
