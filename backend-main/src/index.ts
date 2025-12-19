@@ -1,9 +1,45 @@
-import { Hono } from 'hono'
+import { Hono } from 'hono';
+import setupRoutes from './routes/health.routes';
+import domainRoutes from './routes/domain.routes';
+import urlRoutes from './routes/url.routes';
+import logRoutes from './routes/log.routes';
+import type { D1Database } from './types/cloudflare';
 
-const app = new Hono()
+export interface Env {
+  DB: D1Database;
+}
 
+const app = new Hono<{ Bindings: Env }>();
+
+// Health check endpoint
 app.get('/', (c) => {
-  return c.text('Hello Hono!')
-})
+  return c.json({ 
+    message: 'URL Shortener API',
+    version: '1.0.0',
+    status: 'healthy'
+  });
+});
 
-export default app
+// Mount routes
+app.route('/api/health', setupRoutes);
+app.route('/api/domains', domainRoutes);
+app.route('/api/urls', urlRoutes);
+app.route('/api/logs', logRoutes);
+
+// 404 handler
+app.notFound((c) => {
+  return c.json({ error: 'Not Found' }, 404);
+});
+
+// Error handler
+app.onError((err, c) => {
+  return c.json(
+    {
+      error: 'Internal Server Error',
+      message: err.message,
+    },
+    500
+  );
+});
+
+export default app;
