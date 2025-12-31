@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS domains (
 	id text PRIMARY KEY NOT NULL,
-	domain_string text NOT NULL UNIQUE, /* every domain is stored only once */
+	domain_name text NOT NULL UNIQUE, /* every domain is stored only once */
 	created_at integer NOT NULL,
 	updated_at integer NOT NULL
 );

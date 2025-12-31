@@ -8,14 +8,14 @@ const domainRoutes = new Hono<{ Bindings: Env }>();
 domainRoutes.post('/', async (c) => {
   try {
     const body = await c.req.json();
-    const { domain_string } = body;
+    const { domain_name } = body;
 
-    if (!domain_string) {
-      return c.json({ error: 'domain_string is required' }, 400);
+    if (!domain_name) {
+      return c.json({ error: 'domain_name is required' }, 400);
     }
 
     const domainCRUD = new DomainCRUD(c.env.DB);
-    const domain = await domainCRUD.create({ domain_string });
+    const domain = await domainCRUD.create({ domain_name });
 
     return c.json(domain, 201);
   } catch (error) {

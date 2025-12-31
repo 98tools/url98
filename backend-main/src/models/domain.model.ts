@@ -1,14 +1,14 @@
 export interface Domain {
   id: string;
-  domain_string: string;
+  domain_name: string;
   created_at: number;
   updated_at: number;
 }
 
 export interface CreateDomainInput {
-  domain_string: string;
+  domain_name: string;
 }
 
 export interface UpdateDomainInput {
-  domain_string?: string;
+  domain_name?: string;
 }

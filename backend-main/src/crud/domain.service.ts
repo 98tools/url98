@@ -11,14 +11,14 @@ export class DomainCRUD {
     
     await this.db
       .prepare(
-        'INSERT INTO domains (id, domain_string, created_at, updated_at) VALUES (?, ?, ?, ?)'
+        'INSERT INTO domains (id, domain_name, created_at, updated_at) VALUES (?, ?, ?, ?)'
       )
-      .bind(id, input.domain_string, now, now)
+      .bind(id, input.domain_name, now, now)
       .run();
 
     return {
       id,
-      domain_string: input.domain_string,
+      domain_name: input.domain_name,
       created_at: now,
       updated_at: now,
     };
@@ -35,7 +35,7 @@ export class DomainCRUD {
 
   async findByDomainString(domainString: string): Promise<Domain | null> {
     const result = await this.db
-      .prepare('SELECT * FROM domains WHERE domain_string = ?')
+      .prepare('SELECT * FROM domains WHERE domain_name = ?')
       .bind(domainString)
       .first<Domain>();
 
@@ -61,9 +61,9 @@ export class DomainCRUD {
     const updates: string[] = [];
     const values: any[] = [];
 
-    if (input.domain_string !== undefined) {
-      updates.push('domain_string = ?');
-      values.push(input.domain_string);
+    if (input.domain_name !== undefined) {
+      updates.push('domain_name = ?');
+      values.push(input.domain_name);
     }
 
     if (updates.length === 0) {

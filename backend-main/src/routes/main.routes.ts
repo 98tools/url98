@@ -15,7 +15,7 @@ mainRoutes.get('/:keyword', async (c) => {
       return c.json({ error: 'Host header missing' }, 400);
     }
 
-    // 2. Find domain by domain_string
+    // 2. Find domain by domain_name
     const domainCRUD = new DomainCRUD(c.env.DB);
     const domain = await domainCRUD.findByDomainString(host);
     if (!domain) {
