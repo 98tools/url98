@@ -8,11 +8,12 @@ const urlRoutes = new Hono<{ Bindings: Env }>();
 urlRoutes.post('/', async (c) => {
   try {
     const body = await c.req.json();
-    const { user_id, domain_id, url, title, keyword, description, ip_address, options } = body;
 
-    if (!user_id || !domain_id || !url || !title || !keyword || !description) {
+    const { user_id, domain_name, url, title, keyword, description, ip_address, options } = body;
+
+    if (!user_id || !domain_name || !url || !title || !keyword || !description) {
       return c.json(
-        { error: 'user_id, domain_id, url, title, keyword, and description are required' },
+        { error: 'user_id, domain_name, url, title, keyword, and description are required' },
         400
       );
     }
@@ -20,7 +21,7 @@ urlRoutes.post('/', async (c) => {
     const urlCRUD = new UrlCRUD(c.env.DB);
     const newUrl = await urlCRUD.create({
       user_id,
-      domain_id,
+      domain_name,
       url,
       title,
       keyword,
@@ -129,15 +130,15 @@ urlRoutes.get('/user/:userId', async (c) => {
   }
 });
 
-// Get URLs by domain ID
-urlRoutes.get('/domain/:domainId', async (c) => {
+// Get URLs by domain name
+urlRoutes.get('/domain/:domainName', async (c) => {
   try {
-    const domainId = c.req.param('domainId');
+    const domainName = c.req.param('domainName');
     const limit = parseInt(c.req.query('limit') || '100');
     const offset = parseInt(c.req.query('offset') || '0');
 
     const urlCRUD = new UrlCRUD(c.env.DB);
-    const urls = await urlCRUD.findByDomainId(domainId, limit, offset);
+    const urls = await urlCRUD.findByDomainName(domainName, limit, offset);
 
     return c.json({ data: urls });
   } catch (error) {

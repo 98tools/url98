@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS urls (
 	created_at integer NOT NULL,
 	updated_at integer NOT NULL,
     user_id text NOT NULL,
-    domain_id text NOT NULL,
+    domain_name text NOT NULL,
 	url text NOT NULL,
 	title text NOT NULL,
 	keyword text NOT NULL,
@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS urls (
 	ip_address text,
 	active integer DEFAULT 1 NOT NULL,
     options text,
-    FOREIGN KEY (domain_id) REFERENCES domains(id) ON UPDATE no action ON DELETE no action
+    FOREIGN KEY (domain_name) REFERENCES domains(domain_name) ON UPDATE no action ON DELETE no action
 );
 
 CREATE TABLE IF NOT EXISTS logs (

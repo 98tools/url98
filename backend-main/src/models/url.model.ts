@@ -1,9 +1,10 @@
+
 export interface Url {
   id: string;
   created_at: number;
   updated_at: number;
   user_id: string;
-  domain_id: string;
+  domain_name: string;
   url: string;
   title: string;
   keyword: string;
@@ -16,7 +17,7 @@ export interface Url {
 
 export interface CreateUrlInput {
   user_id: string;
-  domain_id: string;
+  domain_name: string;
   url: string;
   title: string;
   keyword: string;
@@ -27,7 +28,7 @@ export interface CreateUrlInput {
 
 export interface UpdateUrlInput {
   user_id?: string;
-  domain_id?: string;
+  domain_name?: string;
   url?: string;
   title?: string;
   keyword?: string;

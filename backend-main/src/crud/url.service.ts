@@ -11,7 +11,7 @@ export class UrlCRUD {
     
     await this.db
       .prepare(
-        `INSERT INTO urls (id, created_at, updated_at, user_id, domain_id, url, title, keyword, description, clicks, ip_address, active, options)
+        `INSERT INTO urls (id, created_at, updated_at, user_id, domain_name, url, title, keyword, description, clicks, ip_address, active, options)
          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 0, ?, 1, ?)`
       )
       .bind(
@@ -19,7 +19,7 @@ export class UrlCRUD {
         now,
         now,
         input.user_id,
-        input.domain_id,
+        input.domain_name,
         input.url,
         input.title,
         input.keyword,
@@ -34,7 +34,7 @@ export class UrlCRUD {
       created_at: now,
       updated_at: now,
       user_id: input.user_id,
-      domain_id: input.domain_id,
+      domain_name: input.domain_name,
       url: input.url,
       title: input.title,
       keyword: input.keyword,
@@ -70,16 +70,16 @@ export class UrlCRUD {
       .bind(userId, limit, offset)
       .all<Url>();
 
-    return result.results || [];
+    return (result && result.results) || [];
   }
 
-  async findByDomainId(domainId: string, limit = 100, offset = 0): Promise<Url[]> {
+  async findByDomainName(domainName: string, limit = 100, offset = 0): Promise<Url[]> {
     const result = await this.db
-      .prepare('SELECT * FROM urls WHERE domain_id = ? ORDER BY created_at DESC LIMIT ? OFFSET ?')
-      .bind(domainId, limit, offset)
+      .prepare('SELECT * FROM urls WHERE domain_name = ? ORDER BY created_at DESC LIMIT ? OFFSET ?')
+      .bind(domainName, limit, offset)
       .all<Url>();
 
-    return result.results || [];
+    return (result && result.results) || [];
   }
 
   async findAll(limit = 100, offset = 0): Promise<Url[]> {
@@ -88,7 +88,7 @@ export class UrlCRUD {
       .bind(limit, offset)
       .all<Url>();
 
-    return result.results || [];
+    return (result && result.results) || [];
   }
 
   async update(id: string, input: UpdateUrlInput): Promise<Url | null> {
@@ -105,9 +105,9 @@ export class UrlCRUD {
       updates.push('user_id = ?');
       values.push(input.user_id);
     }
-    if (input.domain_id !== undefined) {
-      updates.push('domain_id = ?');
-      values.push(input.domain_id);
+    if (input.domain_name !== undefined) {
+      updates.push('domain_name = ?');
+      values.push(input.domain_name);
     }
     if (input.url !== undefined) {
       updates.push('url = ?');
@@ -178,7 +178,7 @@ export class UrlCRUD {
       .bind(limit)
       .all<Url>();
 
-    return result.results || [];
+    return (result && result.results) || [];
   }
 
   async count(): Promise<number> {
