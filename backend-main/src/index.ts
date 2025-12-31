@@ -1,4 +1,5 @@
 import { Hono } from 'hono';
+import mainRoutes from './routes/main.routes';
 import setupRoutes from './routes/health.routes';
 import domainRoutes from './routes/domain.routes';
 import urlRoutes from './routes/url.routes';
@@ -21,6 +22,7 @@ app.get('/', (c) => {
 });
 
 // Mount routes
+app.route('/', mainRoutes);
 app.route('/api/health', setupRoutes);
 app.route('/api/domains', domainRoutes);
 app.route('/api/urls', urlRoutes);
