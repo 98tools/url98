@@ -9,6 +9,21 @@ export class UrlCRUD {
     const now = Date.now();
     const id = generateId();
     
+    // Ensure options is always a JSON string, default '{}'
+    let optionsJson: string;
+    if (input.options === undefined || input.options === null || input.options === '') {
+      optionsJson = '{}';
+    } else if (typeof input.options === 'string') {
+      try {
+        JSON.parse(input.options);
+        optionsJson = input.options;
+      } catch {
+        optionsJson = '{}';
+      }
+    } else {
+      optionsJson = JSON.stringify(input.options);
+    }
+
     await this.db
       .prepare(
         `INSERT INTO urls (id, created_at, updated_at, user_id, domain_name, url, title, keyword, description, clicks, ip_address, active, options)
@@ -25,7 +40,7 @@ export class UrlCRUD {
         input.keyword,
         input.description,
         input.ip_address || null,
-        input.options || null
+        optionsJson
       )
       .run();
 
@@ -42,7 +57,7 @@ export class UrlCRUD {
       clicks: 0,
       ip_address: input.ip_address || null,
       active: 1,
-      options: input.options || null,
+      options: optionsJson,
     };
   }
 
@@ -134,8 +149,21 @@ export class UrlCRUD {
       values.push(input.active);
     }
     if (input.options !== undefined) {
+      let optionsJson: string;
+      if (input.options === null || input.options === undefined || input.options === '') {
+        optionsJson = '{}';
+      } else if (typeof input.options === 'string') {
+        try {
+          JSON.parse(input.options);
+          optionsJson = input.options;
+        } catch {
+          optionsJson = '{}';
+        }
+      } else {
+        optionsJson = JSON.stringify(input.options);
+      }
       updates.push('options = ?');
-      values.push(input.options);
+      values.push(optionsJson);
     }
 
     if (updates.length === 0) {
