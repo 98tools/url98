@@ -19,8 +19,7 @@ mainRoutes.get('/:keyword', async (c) => {
     // Find url by domain_name and keyword
     const urlCRUD = new UrlCRUD(c.env.DB);
     const keyword = c.req.param('keyword');
-    const urls = await urlCRUD.findByDomainName(host);
-    const urlObj = urls.find(u => u.keyword === keyword && u.active === 1);
+    const urlObj = await urlCRUD.findByDomainNameAndKeyword(host, keyword);
     if (!urlObj) {
       return c.json({ error: 'URL not found for this domain and keyword' }, 404);
     }
