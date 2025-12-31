@@ -1,15 +1,16 @@
 {
 	"$schema": "node_modules/wrangler/config-schema.json",
-	"name": "backend-main",
+	"name": "url-be",
 	"main": "src/index.ts",
 	"compatibility_date": "2025-12-18",
 	"d1_databases": [
 		{
 			"binding": "DB",
 			"database_name": "url-shortener-db",
-			"database_id": "44b638d1-b4d5-4bcf-b5bb-9466d8147e20"
+			"database_id": "44b638d1-b4d5-4bcf-b5bb-9466d8147e20",
+			"remote": true
 		}
-	]
+	],
 	// "compatibility_flags": [
 	//   "nodejs_compat"
 	// ],
@@ -38,8 +39,8 @@
 	// "ai": {
 	//   "binding": "AI"
 	// },
-	// "observability": {
-	//   "enabled": true,
-	//   "head_sampling_rate": 1
-	// }
+	"observability": {
+	  "enabled": true,
+	  "head_sampling_rate": 1
+	}
 }
