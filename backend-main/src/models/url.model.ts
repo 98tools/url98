@@ -26,6 +26,22 @@ export interface CreateUrlInput {
   options?: string | null;
 }
 
+// Sample input for creating a URL record
+/*
+{
+  "user_id":"asasasa",
+  "domain_name":"url-ms.********.workers.dev",
+  "url":"https://98tools.com",
+  "title":"demo title 1",
+  "keyword":"demo12",
+  "description":"demo desc 1",
+  "options":{
+    "logFields":["ip_address","user_agent","country","referrer","country_code"]
+  }
+}
+*/
+
+
 export interface UpdateUrlInput {
   user_id?: string;
   domain_name?: string;
