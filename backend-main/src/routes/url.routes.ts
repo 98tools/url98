@@ -1,8 +1,8 @@
 import { Hono } from 'hono';
-import type { Env } from '../index';
+import type { AppBindings } from '../types/env';
 import { UrlCRUD } from '../crud/url.service';
 
-const urlRoutes = new Hono<{ Bindings: Env }>();
+const urlRoutes = new Hono<AppBindings>();
 
 // Create a new URL
 urlRoutes.post('/', async (c) => {

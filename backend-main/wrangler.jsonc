@@ -11,6 +11,9 @@
 			"remote": true
 		}
 	],
+	"vars": {
+		"AUTH_MS_URL": "http://localhost:8000"
+	},
 	// "compatibility_flags": [
 	//   "nodejs_compat"
 	// ],

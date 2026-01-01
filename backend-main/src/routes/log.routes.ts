@@ -1,8 +1,8 @@
 import { Hono } from 'hono';
-import type { Env } from '../index';
+import type { AppBindings } from '../types/env';
 import { LogCRUD } from '../crud/log.service';
 
-const logRoutes = new Hono<{ Bindings: Env }>();
+const logRoutes = new Hono<AppBindings>();
 
 // Create a new log entry
 logRoutes.post('/', async (c) => {

@@ -1,8 +1,8 @@
 import { Hono } from 'hono';
-import type { Env } from '../index';
+import type { AppBindings } from '../types/env';
 import { DomainCRUD } from '../crud/domain.service';
 
-const domainRoutes = new Hono<{ Bindings: Env }>();
+const domainRoutes = new Hono<AppBindings>();
 
 // Create a new domain
 domainRoutes.post('/', async (c) => {

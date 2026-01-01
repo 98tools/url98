@@ -3,13 +3,10 @@ import setupRoutes from './routes/health.routes';
 import domainRoutes from './routes/domain.routes';
 import urlRoutes from './routes/url.routes';
 import logRoutes from './routes/log.routes';
-import type { D1Database } from './types/cloudflare';
+import { authMiddleware } from './middleware/auth';
+import type { AppBindings } from './types/env';
 
-export interface Env {
-  DB: D1Database;
-}
-
-const app = new Hono<{ Bindings: Env }>();
+const app = new Hono<AppBindings>();
 
 // Health check endpoint
 app.get('/', (c) => {
@@ -19,6 +16,14 @@ app.get('/', (c) => {
     status: 'healthy'
   });
 });
+
+// Authenticated routes
+app.use('/api/domains', authMiddleware);
+app.use('/api/domains/*', authMiddleware);
+app.use('/api/urls', authMiddleware);
+app.use('/api/urls/*', authMiddleware);
+app.use('/api/logs', authMiddleware);
+app.use('/api/logs/*', authMiddleware);
 
 // Mount routes
 app.route('/api/health', setupRoutes);

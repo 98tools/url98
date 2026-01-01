@@ -1,7 +1,7 @@
 import { Hono } from 'hono';
-import type { Env } from '../index';
+import type { AppBindings } from '../types/env';
 
-const setupRoutes = new Hono<{ Bindings: Env }>();
+const setupRoutes = new Hono<AppBindings>();
 
 // Health check for database
 setupRoutes.get('/database', async (c) => {
