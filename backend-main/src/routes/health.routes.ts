@@ -3,6 +3,14 @@ import type { AppBindings } from '../types/env';
 
 const setupRoutes = new Hono<AppBindings>();
 
+// Basic health check
+setupRoutes.get('/', (c) => {
+  return c.json({
+    status: 'healthy',
+    message: 'API is running',
+  });
+});
+
 // Health check for database
 setupRoutes.get('/database', async (c) => {
   try {
