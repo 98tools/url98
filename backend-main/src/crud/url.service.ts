@@ -70,37 +70,10 @@ export class UrlCRUD {
     return result || null;
   }
 
-  async findByKeyword(keyword: string): Promise<Url | null> {
-    const result = await this.db
-      .prepare('SELECT * FROM urls WHERE keyword = ? AND active = 1')
-      .bind(keyword)
-      .first<Url>();
-
-    return result || null;
-  }
-
   async findByUserId(userId: string, limit = 100, offset = 0): Promise<Url[]> {
     const result = await this.db
       .prepare('SELECT * FROM urls WHERE user_id = ? ORDER BY created_at DESC LIMIT ? OFFSET ?')
       .bind(userId, limit, offset)
-      .all<Url>();
-
-    return (result && result.results) || [];
-  }
-
-  async findByDomainName(domainName: string, limit = 100, offset = 0): Promise<Url[]> {
-    const result = await this.db
-      .prepare('SELECT * FROM urls WHERE domain_name = ? ORDER BY created_at DESC LIMIT ? OFFSET ?')
-      .bind(domainName, limit, offset)
-      .all<Url>();
-
-    return (result && result.results) || [];
-  }
-
-  async findAll(limit = 100, offset = 0): Promise<Url[]> {
-    const result = await this.db
-      .prepare('SELECT * FROM urls ORDER BY created_at DESC LIMIT ? OFFSET ?')
-      .bind(limit, offset)
       .all<Url>();
 
     return (result && result.results) || [];
@@ -189,24 +162,6 @@ export class UrlCRUD {
       .run();
 
     return result.success;
-  }
-
-  async incrementClicks(id: string): Promise<boolean> {
-    const result = await this.db
-      .prepare('UPDATE urls SET clicks = clicks + 1, updated_at = ? WHERE id = ?')
-      .bind(Date.now(), id)
-      .run();
-
-    return result.success;
-  }
-
-  async getTopUrls(limit = 10): Promise<Url[]> {
-    const result = await this.db
-      .prepare('SELECT * FROM urls WHERE active = 1 ORDER BY clicks DESC LIMIT ?')
-      .bind(limit)
-      .all<Url>();
-
-    return (result && result.results) || [];
   }
 
   async count(): Promise<number> {
