@@ -7,6 +7,11 @@ const domainRoutes = new Hono<AppBindings>();
 // Create a new domain
 domainRoutes.post('/', async (c) => {
   try {
+    const user = c.get('user');
+    if (!user || String(user.role).toLowerCase() !== 'admin') {
+      return c.json({ error: 'Forbidden', message: 'Admin role required' }, 403);
+    }
+
     const body = await c.req.json();
     const { domain_name } = body;
 
