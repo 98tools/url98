@@ -1,7 +1,5 @@
 import type { D1Database } from '../types/cloudflare';
 import type { Url } from '../models/url.model';
-import { generateId } from '../utils/id';
-
 export class UrlCRUD {
   constructor(private db: D1Database) {}
 
