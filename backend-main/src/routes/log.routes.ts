@@ -4,31 +4,9 @@ import { LogCRUD } from '../crud/log.service';
 
 const logRoutes = new Hono<AppBindings>();
 
-// Get all logs
-logRoutes.get('/', async (c) => {
-  try {
-    const limit = parseInt(c.req.query('limit') || '100');
-    const offset = parseInt(c.req.query('offset') || '0');
-
-    const logCRUD = new LogCRUD(c.env.DB);
-    const logs = await logCRUD.findAll(limit, offset);
-    const total = await logCRUD.count();
-
-    return c.json({
-      data: logs,
-      pagination: {
-        limit,
-        offset,
-        total,
-      },
-    });
-  } catch (error) {
-    return c.json({ error: 'Failed to fetch logs', details: (error as Error).message }, 500);
-  }
-});
-
 // Get logs by URL ID
 logRoutes.get('/url/:urlId', async (c) => {
+  // auth (only admin or owner of the URL can access)
   try {
     const user = c.get('user');
     const urlId = c.req.param('urlId');
