@@ -1,6 +1,7 @@
 import { Hono } from 'hono';
 import type { AppBindings } from '../types/env';
 import { LogCRUD } from '../crud/log.service';
+import { UrlCRUD } from '../crud/url.service';
 
 const logRoutes = new Hono<AppBindings>();
 
@@ -9,6 +10,9 @@ logRoutes.get('/url/:urlId', async (c) => {
   // auth (only admin or owner of the URL can access)
   try {
     const user = c.get('user');
+    if (!user) {
+      return c.json({ error: 'Unauthorized', message: 'User must be logged in' }, 401);
+    }
     const urlId = c.req.param('urlId');
     
     // Check if user is admin or owns the URL
@@ -16,7 +20,6 @@ logRoutes.get('/url/:urlId', async (c) => {
     
     if (!isAdmin) {
       // Fetch the URL to verify ownership
-      const { UrlCRUD } = await import('../crud/url.service');
       const urlCRUD = new UrlCRUD(c.env.DB);
       const url = await urlCRUD.findById(urlId);
       
