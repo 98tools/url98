@@ -38,7 +38,7 @@ mainRoutes.get('/:keyword', async (c) => {
     // Only store user info if logFields is explicitly defined in database
     if (logFields !== null) {
       if (logFields.includes('ip_address')) {
-        logData.ip_address = c.req.header('cf-connecting-ip') || c.req.header('x-forwarded-for') || null;
+        logData.ip_address = c.req.header('cf-connecting-ip') || c.req.header('x-forwarded-for') || c.req.header('x-real-ip') || null;
       }
       if (logFields.includes('user_agent')) {
         logData.user_agent = c.req.header('user-agent') || null;
