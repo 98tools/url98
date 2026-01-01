@@ -33,10 +33,10 @@ export class DomainCRUD {
     return result || null;
   }
 
-  async findByDomainString(domainString: string): Promise<Domain | null> {
+  async findByDomainName(domainName: string): Promise<Domain | null> {
     const result = await this.db
       .prepare('SELECT * FROM domains WHERE domain_name = ?')
-      .bind(domainString)
+      .bind(domainName)
       .first<Domain>();
 
     return result || null;
