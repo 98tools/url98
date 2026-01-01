@@ -25,9 +25,7 @@ mainRoutes.get('/:keyword', async (c) => {
     }
 
     // Determine which fields to log based on urlObj.options JSON
-    let logFields: string[] = [
-      'ip_address', 'user_agent', 'referrer', 'country_code', 'country', 'city', 'region'
-    ];
+    let logFields: string[] | null = null;
     try {
       const opts = JSON.parse(urlObj.options || '{}');
       if (Array.isArray(opts.logFields)) {
@@ -36,17 +34,21 @@ mainRoutes.get('/:keyword', async (c) => {
     } catch {}
 
     const logData: CreateLogInput = { url_id: urlObj.id };
-    if (logFields.includes('ip_address')) {
-      logData.ip_address = c.req.header('cf-connecting-ip') || c.req.header('x-forwarded-for') || null;
-    }
-    if (logFields.includes('user_agent')) {
-      logData.user_agent = c.req.header('user-agent') || null;
-    }
-    if (logFields.includes('referrer')) {
-      logData.referrer = c.req.header('referer') || null;
-    }
-    if (logFields.includes('country_code')) {
-      logData.country_code = c.req.header('cf-ipcountry') || null;
+    
+    // Only store user info if logFields is explicitly defined in database
+    if (logFields !== null) {
+      if (logFields.includes('ip_address')) {
+        logData.ip_address = c.req.header('cf-connecting-ip') || c.req.header('x-forwarded-for') || null;
+      }
+      if (logFields.includes('user_agent')) {
+        logData.user_agent = c.req.header('user-agent') || null;
+      }
+      if (logFields.includes('referrer')) {
+        logData.referrer = c.req.header('referer') || null;
+      }
+      if (logFields.includes('country_code')) {
+        logData.country_code = c.req.header('cf-ipcountry') || null;
+      }
     }
 
     const logCRUD = new LogCRUD(c.env.DB);
