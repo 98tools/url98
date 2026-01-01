@@ -48,7 +48,7 @@ export class DomainCRUD {
       .bind(limit, offset)
       .all<Domain>();
 
-    return result.results || [];
+    return (result && result.results) || [];
   }
 
   async update(id: string, input: UpdateDomainInput): Promise<Domain | null> {
