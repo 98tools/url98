@@ -6,7 +6,7 @@ const domainRoutes = new Hono<AppBindings>();
 
 // Create a new domain
 domainRoutes.post('/', async (c) => {
-  // auth
+  // auth (only admin can access)
   try {
     const user = c.get('user');
     if (!user || String(user.role).toLowerCase() !== 'admin') {
@@ -31,6 +31,7 @@ domainRoutes.post('/', async (c) => {
 
 // Get all domains
 domainRoutes.get('/', async (c) => {
+  // No auth required for fetching domains
   try {
     const limit = parseInt(c.req.query('limit') || '100');
     const offset = parseInt(c.req.query('offset') || '0');
@@ -46,7 +47,7 @@ domainRoutes.get('/', async (c) => {
 
 // Update domain
 domainRoutes.put('/:id', async (c) => {
-  // auth
+  // auth (only admin can access)
   const user = c.get('user');
   if (!user || String(user.role).toLowerCase() !== 'admin') {
     return c.json({ error: 'Forbidden', message: 'Admin role required' }, 403);
@@ -71,12 +72,12 @@ domainRoutes.put('/:id', async (c) => {
 
 // Delete domain
 domainRoutes.delete('/:id', async (c) => {
-  // auth
+  // auth (only admin can access)
   const user = c.get('user');
   if (!user || String(user.role).toLowerCase() !== 'admin') {
     return c.json({ error: 'Forbidden', message: 'Admin role required' }, 403);
   }
-  
+
   try {
     const id = c.req.param('id');
     const domainCRUD = new DomainCRUD(c.env.DB);
