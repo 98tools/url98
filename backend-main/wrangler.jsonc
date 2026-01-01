@@ -12,7 +12,7 @@
 		}
 	],
 	"vars": {
-		"AUTH_MS_URL": "http://localhost:8000"
+		"AUTH_MS_URL": "http://localhost:9800"
 	},
 	// "compatibility_flags": [
 	//   "nodejs_compat"
