@@ -6,6 +6,7 @@ const domainRoutes = new Hono<AppBindings>();
 
 // Create a new domain
 domainRoutes.post('/', async (c) => {
+  // auth
   try {
     const user = c.get('user');
     if (!user || String(user.role).toLowerCase() !== 'admin') {
@@ -36,57 +37,21 @@ domainRoutes.get('/', async (c) => {
 
     const domainCRUD = new DomainCRUD(c.env.DB);
     const domains = await domainCRUD.findAll(limit, offset);
-    const total = await domainCRUD.count();
 
-    return c.json({
-      data: domains,
-      pagination: {
-        limit,
-        offset,
-        total,
-      },
-    });
+    return c.json(domains);
   } catch (error) {
     return c.json({ error: 'Failed to fetch domains', details: (error as Error).message }, 500);
   }
 });
 
-// Get domain by ID
-domainRoutes.get('/:id', async (c) => {
-  try {
-    const id = c.req.param('id');
-    const domainCRUD = new DomainCRUD(c.env.DB);
-    const domain = await domainCRUD.findById(id);
-
-    if (!domain) {
-      return c.json({ error: 'Domain not found' }, 404);
-    }
-
-    return c.json(domain);
-  } catch (error) {
-    return c.json({ error: 'Failed to fetch domain', details: (error as Error).message }, 500);
-  }
-});
-
-// Get domain by domain string
-domainRoutes.get('/by-string/:domainString', async (c) => {
-  try {
-    const domainString = c.req.param('domainString');
-    const domainCRUD = new DomainCRUD(c.env.DB);
-    const domain = await domainCRUD.findByDomainString(domainString);
-
-    if (!domain) {
-      return c.json({ error: 'Domain not found' }, 404);
-    }
-
-    return c.json(domain);
-  } catch (error) {
-    return c.json({ error: 'Failed to fetch domain', details: (error as Error).message }, 500);
-  }
-});
-
 // Update domain
 domainRoutes.put('/:id', async (c) => {
+  // auth
+  const user = c.get('user');
+  if (!user || String(user.role).toLowerCase() !== 'admin') {
+    return c.json({ error: 'Forbidden', message: 'Admin role required' }, 403);
+  }
+
   try {
     const id = c.req.param('id');
     const body = await c.req.json();
@@ -106,6 +71,12 @@ domainRoutes.put('/:id', async (c) => {
 
 // Delete domain
 domainRoutes.delete('/:id', async (c) => {
+  // auth
+  const user = c.get('user');
+  if (!user || String(user.role).toLowerCase() !== 'admin') {
+    return c.json({ error: 'Forbidden', message: 'Admin role required' }, 403);
+  }
+  
   try {
     const id = c.req.param('id');
     const domainCRUD = new DomainCRUD(c.env.DB);
