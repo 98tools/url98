@@ -12,10 +12,3 @@ export interface D1PreparedStatement {
   all<T = unknown>(): Promise<{ results: T[] } | null>;
   run<T = unknown>(): Promise<{ success: boolean; meta?: T }>;
 }
-
-// Example: KVNamespace type (simplified)
-export interface KVNamespace {
-  get(key: string): Promise<string | null>;
-  put(key: string, value: string): Promise<void>;
-  delete(key: string): Promise<void>;
-}
