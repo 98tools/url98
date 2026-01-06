@@ -20,7 +20,7 @@ jobs:
           node-version: 20
 
       - name: Install project dependencies
-        run: npm install
+        run: cd backend-main && npm install
 
       - name: Install Wrangler
         run: npm install -g wrangler
