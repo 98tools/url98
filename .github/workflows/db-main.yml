@@ -1,0 +1,33 @@
+name: (main) [db] Database Migartion Trigger
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: main
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+
+      - name: Install Wrangler
+        run: npm install -g wrangler
+
+      - name: Modify the wrangler file configuration to replace database_id
+        run: |
+          cd database
+          # Update wrangler.toml with environment variables using sed
+          sed -i "s|database_id = \".*\"|database_id = \"${{ vars.CLOUDFLARE_D1_DATABASE_ID }}\"|g" wrangler.toml
+
+      - name: Trigger Database Migration
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: |
+          cd database
+          wrangler d1 execute url-shortener-db --file main.sql --remote
