@@ -25,12 +25,16 @@ jobs:
       - name: Install Wrangler
         run: npm install -g wrangler
 
-      - name: Update wrangler config with environment variables
+      - name: Update wrangler config with environment variables && Update name to append dev1
         run: |
           cd backend-main
           # Update wrangler.jsonc with environment variables using sed
           sed -i "s|\"AUTH_MS_URL\":[[:space:]]*\"[^\"]*\"|\"AUTH_MS_URL\": \"${{ vars.AUTH_MS_URL }}\"|g" wrangler.jsonc
           sed -i "s|\"database_id\":[[:space:]]*\"[^\"]*\"|\"database_id\": \"${{ vars.CLOUDFLARE_D1_DATABASE_ID }}\"|g" wrangler.jsonc
+          
+          # Update project name to include -dev suffix
+          sed -i 's/"name": "\([^"]*\)"/"name": "\1-dev"/' wrangler.jsonc
+
           echo "Successfully updated wrangler.jsonc with environment variables"
 
       - name: Deploy to Cloudflare Workers
