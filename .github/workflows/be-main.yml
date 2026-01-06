@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - main
+    paths:
+      - 'backend-main/**'
+      - '.github/workflows/be-main.yml'
   workflow_dispatch:
 
 jobs:

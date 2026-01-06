@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - dev
+    paths:
+      - 'backend-main/**'
+      - '.github/workflows/be-dev.yml'
   workflow_dispatch:
 
 jobs:
