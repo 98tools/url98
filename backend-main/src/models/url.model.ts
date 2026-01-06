@@ -43,13 +43,9 @@ export interface CreateUrlInput {
 
 
 export interface UpdateUrlInput {
-  user_id?: string;
-  domain_name?: string;
   url?: string;
   title?: string;
-  keyword?: string;
   description?: string;
-  ip_address?: string | null;
   active?: number;
   options?: string | null;
 }

@@ -89,14 +89,6 @@ export class UrlCRUD {
     const updates: string[] = [];
     const values: any[] = [];
 
-    if (input.user_id !== undefined) {
-      updates.push('user_id = ?');
-      values.push(input.user_id);
-    }
-    if (input.domain_name !== undefined) {
-      updates.push('domain_name = ?');
-      values.push(input.domain_name);
-    }
     if (input.url !== undefined) {
       updates.push('url = ?');
       values.push(input.url);
@@ -105,17 +97,9 @@ export class UrlCRUD {
       updates.push('title = ?');
       values.push(input.title);
     }
-    if (input.keyword !== undefined) {
-      updates.push('keyword = ?');
-      values.push(input.keyword);
-    }
     if (input.description !== undefined) {
       updates.push('description = ?');
       values.push(input.description);
-    }
-    if (input.ip_address !== undefined) {
-      updates.push('ip_address = ?');
-      values.push(input.ip_address);
     }
     if (input.active !== undefined) {
       updates.push('active = ?');
