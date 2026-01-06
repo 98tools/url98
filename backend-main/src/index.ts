@@ -1,4 +1,5 @@
 import { Hono } from 'hono';
+import { cors } from 'hono/cors';
 import setupRoutes from './routes/health.routes';
 import domainRoutes from './routes/domain.routes';
 import urlRoutes from './routes/url.routes';
@@ -7,6 +8,13 @@ import { authMiddleware } from './middleware/auth';
 import type { AppBindings } from './types/env';
 
 const app = new Hono<AppBindings>();
+
+// Global CORS
+app.use('*', cors({
+  origin: '*',
+  allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowHeaders: ['Authorization', 'Content-Type'],
+}));
 
 // Health check endpoint
 app.get('/', (c) => {
@@ -24,6 +32,9 @@ app.use('/api/urls', authMiddleware);
 app.use('/api/urls/*', authMiddleware);
 app.use('/api/logs', authMiddleware);
 app.use('/api/logs/*', authMiddleware);
+
+// Explicit OPTIONS handler (in case some proxies bypass middleware order)
+app.options('*', (c) => c.text('', 204));
 
 // Mount routes
 app.route('/api/health', setupRoutes);
