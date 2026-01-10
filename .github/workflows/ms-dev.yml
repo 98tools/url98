@@ -5,7 +5,7 @@ on:
     branches:
       - dev
     paths:
-      - 'backend-main/**'
+      - 'backend-domain-ms/**'
       - '.github/workflows/ms-dev.yml'
   workflow_dispatch:
 
@@ -23,7 +23,7 @@ jobs:
           node-version: 20
 
       - name: Install project dependencies
-        run: cd backend-main && npm install
+        run: cd backend-domain-ms && npm install
 
       - name: Install Wrangler
         run: npm install -g wrangler
