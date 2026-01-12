@@ -4,6 +4,7 @@ import setupRoutes from './routes/health.routes';
 import domainRoutes from './routes/domain.routes';
 import urlRoutes from './routes/url.routes';
 import logRoutes from './routes/log.routes';
+import openRoutes from './routes/open.routes';
 import { authMiddleware } from './middleware/auth';
 import type { AppBindings } from './types/env';
 
@@ -41,6 +42,7 @@ app.route('/api/health', setupRoutes);
 app.route('/api/domains', domainRoutes);
 app.route('/api/urls', urlRoutes);
 app.route('/api/logs', logRoutes);
+app.route('/api/open', openRoutes);
 
 // 404 handler
 app.notFound((c) => {
