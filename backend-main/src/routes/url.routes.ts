@@ -38,8 +38,17 @@ urlRoutes.post('/', async (c) => {
         return c.json({ error: 'Domain not found' }, 404);
       }
     }
+
     
     const urlCRUD = new UrlCRUD(c.env.DB);
+    
+    // Check if the URL already exists
+    const existingUrl = await urlCRUD.findByKeywordAndDomain(keyword, domain_name);
+    if (existingUrl) {
+      return c.json({ error: 'URL already exists for this domain' }, 409);
+    }
+
+    // Create the new URL
     const newUrl = await urlCRUD.create({
       user_id,
       domain_name,
