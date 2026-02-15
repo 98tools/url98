@@ -3,6 +3,7 @@ import type { Env } from '../index';
 import { UrlCRUD } from '../crud/url.service';
 import { LogCRUD } from '../crud/log.service';
 import type { CreateLogInput } from '../models/log.model';
+import { UserCRUD } from '../crud/user.services';
 
 const mainRoutes = new Hono<{ Bindings: Env }>();
 
@@ -17,12 +18,28 @@ mainRoutes.get('/:keyword', async (c) => {
     }
 
     // Find url by domain_name and keyword
-    const urlCRUD = new UrlCRUD(c.env.DB);
+    const urlCRUD = new UrlCRUD(c.env.URL_DB);
     const keyword = c.req.param('keyword');
     const urlObj = await urlCRUD.findByDomainNameAndKeyword(host, keyword);
     if (!urlObj) {
       return c.json({ error: 'URL not found for this domain and keyword' }, 404);
     }
+
+    // Check if user has enough points
+    const userCRUD = new UserCRUD(c.env.AUTH_DB);
+    const userID = urlObj.user_id;
+    const points = await userCRUD.getUserPoints(userID);
+    if (points === null) {
+      return c.json({ error: 'User not found' }, 404);
+    }
+    if (parseInt(points) <= 0) {
+      return c.json({ error: 'Insufficient points' }, 403);
+    }
+
+    // Deduct point and log request
+    const shortUrl = urlObj.domain_name + '/' + urlObj.keyword;
+    await userCRUD.insertRequest(userID, shortUrl);
+    await userCRUD.deductPoint(userID);
 
     // Determine which fields to log based on urlObj.options JSON
     let logFields: string[] | null = null;
@@ -51,7 +68,7 @@ mainRoutes.get('/:keyword', async (c) => {
       }
     }
 
-    const logCRUD = new LogCRUD(c.env.DB);
+    const logCRUD = new LogCRUD(c.env.URL_DB);
     await logCRUD.create(logData);
     
     // Redirect to destination

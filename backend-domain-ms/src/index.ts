@@ -3,7 +3,8 @@ import mainRoutes from './routes/main.routes';
 import type { D1Database } from './types/cloudflare';
 
 export interface Env {
-  DB: D1Database;
+  URL_DB: D1Database;
+  AUTH_DB: D1Database;
 }
 
 const app = new Hono<{ Bindings: Env }>();
