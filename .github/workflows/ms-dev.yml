@@ -28,7 +28,7 @@ jobs:
       - name: Install Wrangler
         run: npm install -g wrangler
 
-      - name: Update wrangler config with environment variables && Update name to append dev1
+      - name: Update wrangler config with environment variables && Update name to append dev
         run: |
           cd backend-domain-ms
 
@@ -40,7 +40,7 @@ jobs:
               else 
                   . 
               end
-          )' wrangler.jsonc > wrangler2.jsonc && mv wrangler2.jsonc wrangler.jsonc
+          ) | .name += "-dev"' wrangler.jsonc > wrangler2.jsonc && mv wrangler2.jsonc wrangler.jsonc
 
           echo "Successfully updated wrangler.jsonc with environment variables"
 
