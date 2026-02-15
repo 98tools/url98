@@ -16,9 +16,5 @@
 			"database_id": "d20b2855-46a5-4a1a-b964-90295000b794",
 			"remote": true
 		}
-	],
-	// "observability": {
-	//   "enabled": true,
-	//   "head_sampling_rate": 1
-	// }
+	]
 }
