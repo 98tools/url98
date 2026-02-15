@@ -18,6 +18,8 @@ urlRoutes.post('/', async (c) => {
     const user_id = user.id;
     const ip_address = c.req.header('cf-connecting-ip') || c.req.header('x-forwarded-for') || c.req.header('x-real-ip') || '';
     const { domain_name, url, title, keyword, description, options } = body;
+
+    // TODO: Add input validation for fields to ensure they meet expected formats.
     
     if (!user_id || !domain_name || !url || !title || !keyword || !description) {
       return c.json(
@@ -30,7 +32,11 @@ urlRoutes.post('/', async (c) => {
     const domainCRUD = new DomainCRUD(c.env.DB);
     const domainExists = await domainCRUD.findByDomainName(domain_name);
     if (!domainExists) {
-      return c.json({ error: 'Domain not found' }, 404);
+      // Check if user is admin (admin is able to bypass this endpoint)
+      const isAdmin = user?.role?.toLowerCase() === 'admin';
+      if (!isAdmin) {
+        return c.json({ error: 'Domain not found' }, 404);
+      }
     }
     
     const urlCRUD = new UrlCRUD(c.env.DB);
@@ -140,6 +146,7 @@ urlRoutes.delete('/:id', async (c) => {
       }
     }
     
+    // TODO: find out a way to handle the logs FOREIGN KEY error, perhaps delete teh logs first, or maybe inactivate the url only 
     const success = await urlCRUD.delete(id);
 
     if (!success) {
