@@ -32,7 +32,11 @@ jobs:
         run: |
           cd backend-domain-ms
           # Update wrangler.jsonc with environment variables using sed
-          sed -i "s|\"database_id\":[[:space:]]*\"[^\"]*\"|\"database_id\": \"${{ vars.CLOUDFLARE_D1_DATABASE_ID }}\"|g" wrangler.jsonc
+          # Update URL_DB database_id
+          sed -i '/url-shortener-db/{n;s/"database_id":[[:space:]]*"[^"]*"/"database_id": "${{ vars.URL_DB_ID }}"/}' wrangler.jsonc
+          # Update AUTH_DB database_name and database_id
+          sed -i 's/"database_name": "98tools-demo-1"/"database_name": "${{ vars.AUTH_DB_NAME }}"/' wrangler.jsonc
+          sed -i '/\${{ vars.AUTH_DB_NAME }}/{n;s/"database_id":[[:space:]]*"[^"]*"/"database_id": "${{ vars.AUTH_DB_ID }}"/}' wrangler.jsonc
           
           # Update project name to include -dev suffix
           sed -i 's/"name": "\([^"]*\)"/"name": "\1-dev"/' wrangler.jsonc
