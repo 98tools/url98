@@ -37,7 +37,8 @@ mainRoutes.get('/:keyword', async (c) => {
     }
 
     // Deduct point and log request
-    await userCRUD.insertRequest(userID, urlObj.domain_name);
+    const shortUrl = urlObj.domain_name + '/' + urlObj.keyword;
+    await userCRUD.insertRequest(userID, shortUrl);
     await userCRUD.deductPoint(userID);
 
     // Determine which fields to log based on urlObj.options JSON
