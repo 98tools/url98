@@ -17,7 +17,7 @@ mainRoutes.get('/:keyword', async (c) => {
     }
 
     // Find url by domain_name and keyword
-    const urlCRUD = new UrlCRUD(c.env.DB);
+    const urlCRUD = new UrlCRUD(c.env.URL_DB);
     const keyword = c.req.param('keyword');
     const urlObj = await urlCRUD.findByDomainNameAndKeyword(host, keyword);
     if (!urlObj) {
@@ -51,7 +51,7 @@ mainRoutes.get('/:keyword', async (c) => {
       }
     }
 
-    const logCRUD = new LogCRUD(c.env.DB);
+    const logCRUD = new LogCRUD(c.env.URL_DB);
     await logCRUD.create(logData);
     
     // Redirect to destination
