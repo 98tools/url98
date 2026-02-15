@@ -18,8 +18,7 @@ CREATE TABLE IF NOT EXISTS urls (
 	clicks integer DEFAULT 0 NOT NULL,
 	ip_address text,
 	active integer DEFAULT 1 NOT NULL,
-    options text,
-    FOREIGN KEY (domain_name) REFERENCES domains(domain_name) ON UPDATE no action ON DELETE no action
+    options text
 );
 
 CREATE TABLE IF NOT EXISTS logs (
