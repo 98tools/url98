@@ -79,6 +79,15 @@ export class UrlCRUD {
     return (result && result.results) || [];
   }
 
+  async findByKeywordAndDomain(keyword: string, domain_name: string): Promise<Url | null> {
+    const result = await this.db
+      .prepare('SELECT * FROM urls WHERE keyword = ? AND domain_name = ?')
+      .bind(keyword, domain_name)
+      .first<Url>();
+      
+    return result || null;
+  }
+
   async update(id: string, input: UpdateUrlInput): Promise<Url | null> {
     const existing = await this.findById(id);
     if (!existing) {
