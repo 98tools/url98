@@ -4,6 +4,7 @@ import type { D1Database } from './types/cloudflare';
 
 export interface Env {
   URL_DB: D1Database;
+  AUTH_DB: D1Database;
 }
 
 const app = new Hono<{ Bindings: Env }>();

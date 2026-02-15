@@ -9,6 +9,12 @@
 			"database_name": "url-shortener-db",
 			"database_id": "44b638d1-b4d5-4bcf-b5bb-9466d8147e20",
 			"remote": true
+		},
+		{
+			"binding": "AUTH_DB",
+			"database_name": "98tools-demo-1",
+			"database_id": "d20b2855-46a5-4a1a-b964-90295000b794",
+			"remote": true
 		}
 	],
 	// "observability": {
