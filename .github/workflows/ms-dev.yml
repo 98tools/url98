@@ -31,16 +31,16 @@ jobs:
       - name: Update wrangler config with environment variables && Update name to append dev1
         run: |
           cd backend-domain-ms
-          # Update wrangler.jsonc with environment variables using sed
-          # Update URL_DB database_id
-          sed -i '/url-shortener-db/{n;s/"database_id":[[:space:]]*"[^"]*"/"database_id": "${{ vars.URL_DATABASE_ID }}"/}' wrangler.jsonc
-          # Update AUTH_DB database_id (before changing database_name)
-          sed -i '/98tools-demo-1/{n;s/"database_id":[[:space:]]*"[^"]*"/"database_id": "${{ vars.AUTH_DATABASE_ID }}"/}' wrangler.jsonc
-          # Update AUTH_DB database_name
-          sed -i 's/"database_name": "98tools-demo-1"/"database_name": "${{ vars.AUTH_DB_NAME }}"/' wrangler.jsonc
-          
-          # Update project name to include -dev suffix
-          sed -i 's/"name": "\([^"]*\)"/"name": "\1-dev"/' wrangler.jsonc
+
+          jq '.d1_databases |= map(
+              if .binding == "URL_DB" then 
+                  .database_id = "${{ vars.URL_DATABASE_ID }}" 
+              elif .binding == "AUTH_DB" then 
+                  .database_name = "${{ vars.AUTH_DB_NAME }}" | .database_id = "${{ vars.AUTH_DATABASE_ID }}" 
+              else 
+                  . 
+              end
+          )' wrangler.jsonc > wrangler2.jsonc && mv wrangler2.jsonc wrangler.jsonc
 
           echo "Successfully updated wrangler.jsonc with environment variables"
 
